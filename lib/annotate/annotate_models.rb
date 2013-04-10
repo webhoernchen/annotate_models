@@ -229,7 +229,15 @@ module AnnotateModels
     # Check for namespaced models in subdirectories as well as models
     # in subdirectories without namespacing.
     def get_model_class(file)
-      require File.expand_path("#{model_dir}/#{file}") # this is for non-rails projects, which don't get Rails auto-require magic
+      begin
+        get_model_class_from_file file
+      rescue LoadError, NameError
+        require File.expand_path("#{model_dir}/#{file}") # this is for non-rails projects, which don't get Rails auto-require magic
+        get_model_class_from_file file
+      end
+    end
+    
+    def get_model_class_from_file(file)
       model = file.gsub(/\.rb$/, '').camelize
       parts = model.split('::')
       begin
