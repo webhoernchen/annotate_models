@@ -132,7 +132,7 @@ module AnnotateModels
           old_content.sub!(/^# #{COMPAT_PREFIX}.*?\n(#.*\n)*\n/, '')
 
           # Write it back
-          new_content = options[:position] == 'before' ?  (info_block + old_content) : (old_content + "\n" + info_block)
+          new_content = options[:position] == 'before' ?  (info_block + old_content) : (old_content.strip + "\n" * 2 + info_block.strip)
 
           File.open(file_name, "wb") { |f| f.puts new_content }
           true
