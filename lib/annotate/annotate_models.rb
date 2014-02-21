@@ -144,7 +144,7 @@ module AnnotateModels
       if File.exist?(file_name)
         content = File.read(file_name)
 
-        content.sub!(/^# #{COMPAT_PREFIX}.*?\n(#.*\n)*\n/, '')
+        content.gsub!(/^# #{COMPAT_PREFIX}.*?\n(#.*\n)*\n?/, '')
 
         File.open(file_name, "wb") { |f| f.puts content }
       end
