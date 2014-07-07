@@ -190,7 +190,7 @@ module AnnotateModels
           if File.exist?(fixture_file_name)
             annotate_one_file(fixture_file_name, info, options_with_position(options, :position_in_fixture))         
           end
-        end
+        end if klass.base_class == klass
       end
       
       annotated
