@@ -4,3 +4,7 @@ rdoc/*
 coverage/*
 spec/debug.log
 pkg/*
+
+# Editor
+*.swp
+*.un~
