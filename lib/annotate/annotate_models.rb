@@ -15,6 +15,8 @@ module AnnotateModels
     # Machinist http://github.com/notahat/machinist
     BLUEPRINTS_DIR         = File.join("test", "blueprints")
 
+    INTEGER_KLASS = 0.class
+
     def model_dir
       @model_dir || "app/models"
     end
@@ -29,7 +31,7 @@ module AnnotateModels
         when NilClass                 then "NULL"
         when TrueClass                then "TRUE"
         when FalseClass               then "FALSE"
-        when Float, Fixnum, Bignum    then value.to_s
+        when Float, INTEGER_KLASS     then value.to_s
         # BigDecimals need to be output in a non-normalized form and quoted.
         when BigDecimal               then value.to_s('F')
         else

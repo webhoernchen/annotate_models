@@ -45,6 +45,7 @@ Gem::Specification.new do |s|
      "spec/annotate_spec.rb",
      "spec/spec_helper.rb"
   ]
+  s.required_ruby_version = '>= 2.4.0'
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
