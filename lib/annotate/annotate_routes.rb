@@ -20,18 +20,25 @@ module AnnotateRoutes
   PREFIX = "#== Route Map"
   
   def self.do_annotate 
-    routes_rb = File.join("config", "routes.rb")
+    routes_rb = File.join('config', 'routes.rb')
+    generated_routes = "#{routes_rb}.txt"
     header = PREFIX + "\n# Generated on #{Time.now.strftime("%d %b %Y %H:%M")}\n#"
     if File.exists? routes_rb
       routes_map = `rake routes`
       routes_map = routes_map.split("\n")
       routes_map.shift # remove the first line of rake routes which is just a file path
-      routes_map = routes_map.inject(header){|sum, line| sum<<"\n# "<<line}
-      content = File.read(routes_rb)
+      routes_map = routes_map.inject(header){|sum, line| sum << "\n# " << line }
+      content = File.read routes_rb
       content, old = content.split(/^#== Route .*?\n/)
-      File.open(routes_rb, "wb") do |f| 
-        f.puts content.sub!(/\n?\z/, "\n") + routes_map 
+
+      File.open(routes_rb, 'w') do |f| 
+        f.puts content.sub!(/\n?\z/, "\n")
       end
+
+      File.open(generated_routes, 'w') do |f| 
+        f.write routes_map
+      end
+
       puts "Route file annotated."
     else
       puts "Can`t find routes.rb"
