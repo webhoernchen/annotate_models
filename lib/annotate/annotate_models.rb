@@ -242,10 +242,31 @@ module AnnotateModels
     def get_model_class_from_file(file)
       model = file.gsub(/\.rb$/, '').camelize
       parts = model.split('::')
-      begin
-        parts.inject(Object) {|klass, part| klass.const_get(part) }
-      rescue LoadError, NameError
-        Object.const_get(parts.last)
+
+      if ''.respond_to? :constantize
+        begin
+          parts.inject(nil) do |klass, part|
+            if klass
+              "#{klass.to_s}::#{part}"
+            else
+              part
+            end.constantize
+          rescue LoadError, NameError => e
+            if klass.to_s.start_with? 'Concerns::'
+              klass = klass.to_s.gsub 'Concerns::', ''
+              retry
+            else
+              p e
+              klass
+            end
+          end
+        end
+      else
+        begin
+          parts.inject(Object) {|klass, part| klass.const_get(part) }
+        rescue LoadError, NameError
+          Object.const_get(parts.last)
+        end
       end
     end
 
