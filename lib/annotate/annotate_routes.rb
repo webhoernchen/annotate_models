@@ -24,7 +24,8 @@ module AnnotateRoutes
     generated_routes = "#{routes_rb}.txt"
     header = PREFIX + "\n# Generated on #{Time.now.strftime("%d %b %Y %H:%M")}\n#"
     if File.exists? routes_rb
-      routes_map = `rake routes`
+      command = Rails.version >= '6.1' ? 'rails' : 'rake'
+      routes_map = `#{command} routes`
       routes_map = routes_map.split("\n")
       routes_map.shift # remove the first line of rake routes which is just a file path
       routes_map = routes_map.inject(header){|sum, line| sum << "\n# " << line }
